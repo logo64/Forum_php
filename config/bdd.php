@@ -1,20 +1,30 @@
 <?php
-$dsn = 'mysql:dbname=forum;host=localhost';
-$user = 'root';
-$password = '';
+$db = new PDO('sqlite:forum.db');
 
-ALTER TABLE topics ADD title VARCHAR(255);
-ALTER TABLE topics ADD category VARCHAR(100);
-ALTER TABLE topics ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+$db->exec("
+CREATE TABLE IF NOT EXISTS user (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT,
+    Password TEXT,
+    Mail TEXT,
+    Role TEXT
+);
 
-ALTER TABLE messages ADD topic_id INT;
-ALTER TABLE messages ADD user_id INT;
-ALTER TABLE messages ADD created_at DATETIME DEFAULT CURRENT_TIMESTAMP;
+CREATE TABLE IF NOT EXISTS topics (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    category TEXT,
+    user_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
 
-try {
-    $bdd = new PDO($dsn, $user, $password, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
-} catch (PDOException $e) {
-    die('Erreur : ' . $e->getMessage());
-}
+CREATE TABLE IF NOT EXISTS messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Contenue TEXT,
+    topic_id INTEGER,
+    user_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+");
+
+echo "DB OK";
