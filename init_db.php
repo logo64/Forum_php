@@ -29,4 +29,12 @@ CREATE TABLE IF NOT EXISTS messages (
 );
 ");
 
+$exists = $db->query("SELECT * FROM users WHERE username = 'admin'")->fetch();
+
+if (!$exists) {
+    $db->exec("
+        INSERT INTO users (username, password, role)
+        VALUES ('admin', 'admin', 'admin')
+    ");
+}
 echo "DB OK";

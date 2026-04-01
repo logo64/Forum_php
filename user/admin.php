@@ -16,8 +16,7 @@
 
 <body>
    <?php
-include "../config/config.php";
-include "../config/bdd.php";
+require_once "config/init.php";
 
 if (!isconnect() || $_SESSION['role'] !== 'admin') {
     header('Location: ../index.php');

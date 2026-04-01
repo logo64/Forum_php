@@ -15,8 +15,7 @@
 
 <body>
     <?php
-    include "../config/config.php";
-    include "../config/bdd.php";
+    require_once "config/init.php";
     $sql = "SELECT * FROM user";
     $requete = $bdd->prepare($sql);
     $requete->execute();

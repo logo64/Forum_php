@@ -1,6 +1,10 @@
 <?php
-include "config/config.php";
-include "config/bdd.php";
+require_once "config/init.php";
+
+if (!isset($_SESSION['user_name'])) {
+    header("Location: connexion.php");
+    exit;
+}
 
 if (!isconnect()) {
     header("location:connexion.php");
@@ -23,6 +27,7 @@ if (isset($_POST['title'], $_POST['category'])) {
     header("location:index.php");
 }
 ?>
+
 
 <link rel="stylesheet" href="style.css">
 

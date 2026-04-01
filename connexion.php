@@ -69,7 +69,7 @@
           </div>
 
           <?php
-          include "config/config.php";
+          require_once "config/init.php";
           if (isconnect() == true) {
             header("location: index.php");
           }
