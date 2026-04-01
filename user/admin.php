@@ -15,20 +15,29 @@
 </head>
 
 <body>
-    <?php
-        include "../config/config.php";
-        include "../config/bdd.php";
+   <?php
+include "../config/config.php";
+include "../config/bdd.php";
 
-    if (isconnect() != true || $_SESSION["user_name"] != "admin") {
-        header('location:../index.php');
-        die;
-    }
+if (!isconnect() || $_SESSION['role'] !== 'admin') {
+    header('Location: ../index.php');
+    exit;
+}
 
-    $sql = "SELECT * FROM user";
-    $requete = $bdd->prepare($sql);
-    $requete->execute();
-    $users = $requete->fetchAll(PDO::FETCH_ASSOC);
-    ?>
+$users = $bdd->query("SELECT * FROM user")->fetchAll();
+?>
+
+<h1>Admin</h1>
+
+<a href="add.php">Ajouter</a>
+
+<?php foreach ($users as $user): ?>
+    <p>
+        <?= $user['Username'] ?>
+        <a href="update.php?user=<?= $user['id'] ?>">Modifier</a>
+        <a href="action.php?id=<?= $user['id'] ?>">Supprimer</a>
+    </p>
+<?php endforeach; ?>
 
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">

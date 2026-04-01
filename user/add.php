@@ -102,23 +102,10 @@
                     </div>
                     <div class="ibox-content forum-container">
                         <form action="action.php" method="POST">
-                            <div class="mb-3">
-                                <label for="Username" class="form-label">Username : </label>
-                                <input type="text" name="Username" class="form-control" id="Username" aria-describedby="emailHelp">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Password" class="form-label">Password : </label>
-                                <input type="text" name="Password" class="form-control" id="Password" aria-describedby="emailHelp">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Mail" class="form-label">Mail : </label>
-                                <input type="text" name="Mail" class="form-control" id="Mail" aria-describedby="emailHelp">
-                            </div>
-                            <div class="mb-3">
-                                <label for="Role" class="form-label">Role : </label>
-                                <input type="text" name="Role" class="form-control" id="Role" aria-describedby="emailHelp">
-                            </div>
-                            <input type="submit" class="btn btn-primary" name="btn_add" value="Ajouter">
+                            <input name="Username" placeholder="Username">
+                            <input name="Password" placeholder="Password">
+                            <input name="Mail" placeholder="Mail">
+                            <button name="btn_add">Ajouter</button>
                         </form>
                     </div>
 

@@ -1,11 +1,14 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 include "config/config.php";
 include "config/bdd.php";
 
-$sql = "SELECT topics.*, user.Username 
+$sql = "SELECT topics.*, users.username 
         FROM topics 
-        JOIN user ON user.id = topics.user_id
-        ORDER BY topics.ID DESC";
+        LEFT JOIN users ON users.id = topics.user_id
+        ORDER BY topics.id DESC";
 
 $topics = $bdd->query($sql)->fetchAll();
 ?>
@@ -15,18 +18,13 @@ $topics = $bdd->query($sql)->fetchAll();
 <div class="container">
 <h1>🎮 Forum FGC</h1>
 
-<?php if (isconnect()): ?>
-    <a class="btn" href="create_topic.php">+ Nouveau topic</a>
-<?php endif; ?>
-
 <?php foreach ($topics as $topic): ?>
 <div class="card">
-    <div class="category"><?= $topic['category'] ?></div>
-    <a href="topic.php?id=<?= $topic['ID'] ?>">
+    <a href="topic.php?id=<?= $topic['id'] ?>">
         <?= htmlspecialchars($topic['title']) ?>
     </a>
     <div class="meta">
-        par <?= $topic['Username'] ?> • <?= $topic['created_at'] ?>
+        par <?= $topic['username'] ?? 'inconnu' ?>
     </div>
 </div>
 <?php endforeach; ?>

@@ -2,32 +2,42 @@
 include "config/config.php";
 include "config/bdd.php";
 
+
+// 🔹 INSCRIPTION
 if (isset($_POST['btn_add'])) {
 
     $Username = htmlspecialchars($_POST['Username']);
     $Password = password_hash($_POST['Password'], PASSWORD_DEFAULT);
     $Mail = htmlspecialchars($_POST['Mail']);
 
-    $sql = "INSERT INTO user (Username, Password, Mail, Role) VALUES (?, ?, ?, 'User')";
-    $bdd->prepare($sql)->execute([$Username, $Password, $Mail]);
+    $stmt = $bdd->prepare("INSERT INTO user (Username, Password, Mail, Role)
+    VALUES (?, ?, ?, 'user')");
 
-    header('location:index.php');
+    $stmt->execute([$Username, $Password, $Mail]);
+
+    header('Location: connexion.php');
     exit;
 }
 
-// LOGIN
-$pseudo = $_POST['login'] ?? '';
-$mdp = $_POST['password'] ?? '';
 
-$sql = "SELECT * FROM user WHERE Username = ?";
-$req = $bdd->prepare($sql);
-$req->execute([$pseudo]);
-$user = $req->fetch();
+// 🔹 LOGIN
+if (isset($_POST['login'])) {
 
-if ($user && password_verify($mdp, $user['Password'])) {
-    $_SESSION["connection"] = true;
-    $_SESSION["user_name"] = $user['Username'];
-    header("location:index.php");
-} else {
-    header("location:connexion.php");
+    $pseudo = $_POST['login'];
+    $mdp = $_POST['password'];
+
+    $stmt = $bdd->prepare("SELECT * FROM user WHERE Username = ?");
+    $stmt->execute([$pseudo]);
+
+    $user = $stmt->fetch();
+
+    if ($user && password_verify($mdp, $user['Password'])) {
+        $_SESSION['user_name'] = $user['Username'];
+        $_SESSION['role'] = $user['Role'];
+
+        header('Location: index.php');
+        exit;
+    } else {
+        echo "Login incorrect";
+    }
 }

@@ -1,60 +1,43 @@
 <?php
-include "../config/config.php";
-include "../config/bdd.php";
+session_start();
+include "config/bdd.php";
 
+// =========================
+// INSCRIPTION
+// =========================
 if (isset($_POST['btn_add'])) {
 
-    $Username = htmlentities($_POST['Username']);
-    $Password = htmlentities($_POST['Password']);
-    $Mail = htmlentities($_POST['Mail']);
-    $Role = htmlentities($_POST['Role']);
+    $username = htmlspecialchars($_POST['Username']);
+    $password = password_hash($_POST['Password'], PASSWORD_DEFAULT);
+    $mail = htmlspecialchars($_POST['Mail']);
 
+    $sql = "INSERT INTO users (username, password, mail, role) VALUES (?, ?, ?, 'user')";
+    $req = $bdd->prepare($sql);
+    $req->execute([$username, $password, $mail]);
 
-    $sql = "INSERT INTO user (Username, Password, Mail, Role)
-    VALUES ('" . $Username . "', '" . $Password . "', '" . $Mail . "', '" . $Role . "')";
-
-    $requete = $bdd->prepare($sql);
-    if (!$requete->execute()) {
-        die('error');
-    }
-    header('location:admin.php');
-    die;
+    header("Location: connexion.php");
+    exit;
 }
 
-if (isset($_POST['btn_update'])) {
-    if (isset($_POST['id'])) {
-        $id = intval($_POST['id']);
-        if ($id <= 1) {
-            header('location:admin.php');
-            die('error');
-        }
-    }
-    $Username = htmlentities($_POST['Username']);
-    $Mail = htmlentities($_POST['Mail']);
-    $Role = htmlentities($_POST['Role']);
-    $sql = "UPDATE user 
-            SET username= '" . $Username . "', Mail='" . $Mail . "', Role='" . $Role . "'
-            WHERE id = " . $id . "";
-    $requete = $bdd->prepare($sql);
-    if (!$requete->execute()) {
-        header('location:admin.php');
-        die('error');
-    }
-    header('location:admin.php');
-    die;
-}
 
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    if ($id > 1) {
-        $sql = "DELETE FROM user
-        WHERE id = " . $id;
-        $requete = $bdd->prepare($sql);
-        if (!$requete->execute()) {
-            header('location:admin.php');
-            die('error');
-        }
-        header('location:admin.php');
-        die;
+// =========================
+// LOGIN
+// =========================
+if (isset($_POST['login']) && isset($_POST['password'])) {
+
+    $pseudo = $_POST['login'];
+    $mdp = $_POST['password'];
+
+    $sql = "SELECT * FROM users WHERE username = ?";
+    $req = $bdd->prepare($sql);
+    $req->execute([$pseudo]);
+    $user = $req->fetch();
+
+    if ($user && password_verify($mdp, $user['password'])) {
+        $_SESSION['user'] = $user;
+        header("Location: index.php");
+        exit;
+    } else {
+        echo "Login incorrect";
     }
 }

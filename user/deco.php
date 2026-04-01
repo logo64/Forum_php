@@ -14,7 +14,7 @@ if (isset($_POST['message'], $_POST['topic_id'])) {
     $reqUser->execute([$_SESSION['user_name']]);
     $user = $reqUser->fetch();
 
-    $sql = "INSERT INTO messages (Contenue, topic_id, user_id)
+    $sql = "INSERT INTO messages (content, topic_id, user_id)
             VALUES (?, ?, ?)";
     $bdd->prepare($sql)->execute([$msg, $topic_id, $user['id']]);
 
