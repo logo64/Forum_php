@@ -1,3 +1,13 @@
+<?php
+require_once "config/init.php";
+
+// si déjà connecté → redirection
+if (isconnect() == true) {
+    header("Location: index.php");
+    exit;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -68,15 +78,12 @@
             </nav>
           </div>
 
-          <?php
-          require_once "config/init.php";
-          if (isconnect() == true) {
-            header("location: index.php");
-          }
-          //pour vider $SESSION
-          /*           $_SESSION = array (); */
+          <?php if (isset($_GET['error'])): ?>
+              <p style="color:red; text-align:center; margin-bottom:10px;">
+              Identifiants incorrects
+              </p>
+          <?php endif; ?>
 
-          ?>
 
           <div class="ibox-content forum-container">
             <form action="action.php" method="post">

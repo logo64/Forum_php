@@ -37,6 +37,7 @@ if (isset($_POST['login'])) {
         header('Location: index.php');
         exit;
     } else {
-        echo "Login incorrect";
+        header("Location: connexion.php?error=1");
+exit;
     }
 }
